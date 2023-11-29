@@ -22,6 +22,15 @@ const gameBoard = (function () {
 const displayController = (function () {
 	let gameOver = false;
 
+	const checkTie = () => {
+		// Flatten our 2d array to 
+		const currentBoard = gameBoard.board.flat()
+
+		if (!gameOver && !currentBoard.includes('')) {
+			return True
+		}
+		return False
+	};
 	const checkRowWin = () => {
 		for (const row of gameBoard.board){
 			const rowSet = new Set(row);
@@ -51,6 +60,13 @@ const displayController = (function () {
 		};
 		return false;
 	};
+
+	return { checkWin, checkTie }
+})();
+
+// PLAYER
+const Player = (name, marker) => {
+
 	const markGrid = (marker,row,column) => {
 		const currentRow = gameBoard.board[row]
 		// Has access to the factoryFunction 
@@ -58,11 +74,6 @@ const displayController = (function () {
 		currentRow[column] = marker
 	};
 
-	return {markGrid, checkWin}
-})();
-
-// PLAYER
-const Player = (name, marker) => {
-	
 	return { name, marker };
 };
+
