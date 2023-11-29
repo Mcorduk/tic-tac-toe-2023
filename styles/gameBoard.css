@@ -1,0 +1,42 @@
+html, body {
+    height: 100%;
+}
+
+.container {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+    min-height: fit-content;
+    height: 600px;
+    width: 60%;
+    margin: auto;
+}
+
+main {
+    min-width: 300px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    flex: 1;
+    display: flex;
+}
+.row:nth-child(2){
+    border-top: solid 2px black;
+    border-bottom: solid 2px black;
+}
+
+.grid {
+    flex: 1;
+
+}
+
+
+.grid:nth-child(2){
+    border-left: solid 2px black;
+    border-right: solid 2px black;
+}
