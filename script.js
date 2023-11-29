@@ -19,7 +19,7 @@ const gameBoard = (function () {
 })();
 
 //DISPLAY
-const displayController = (function () {
+const winController = (function () {
 	let gameOver = false;
 
 	const checkTie = () => {
@@ -74,7 +74,7 @@ const createPlayer = (name, marker) => {
 	const getScore = () => playerScore;
 	const addScore = () => { playerScore++; }
 
-	return { name, marker, markGrid, getScore, addScore };
+	return { name, marker, markGrid, turn };
 };
 
 const gameController = (function () {
@@ -136,5 +136,18 @@ const gameController = (function () {
 		playerArray.push(createPlayer(promptPlayerName(), promptPlayerMarker()));
 	}
 
+	const PlayRound = () => {
+		// Get the first Player
+		getPlayer();
+		//Get the second Player
+		getPlayer();
+		// Display 
+		// Wait for the first player to make a move
+	}
+
 	return { playerArray, getPlayer }
+})();
+
+const displayController = (function () {
+
 })();
