@@ -2,11 +2,16 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+header {
+  padding-top: 30px;
 }
 
 h1 {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 70px;
+  font-size: 56px;
   font-weight: 600;
   background-image: radial-gradient(circle, #553c9a, #ee4b2b);
   color: transparent;
@@ -16,6 +21,19 @@ h1 {
 
 footer {
   margin-top: auto;
-  height: 100px;
+  
   align-self: flex-end;
+  padding: 20px;
+}
+
+img {
+  width: 40px;}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+h3 {
+  padding-bottom: 40px;
 }

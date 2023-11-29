@@ -68,7 +68,10 @@ const winController = (function () {
 const createPlayer = (name, marker) => {
 	let turn = false;
 
-	const markGrid = (row, column) => { gameBoard.board[row][column] = marker; };
+	const markGrid = (row, column) => { 
+		gameBoard.board[row][column] = marker
+		displayController.render();
+	};
 
 	let playerScore = 0
 	const getScore = () => playerScore;
@@ -101,8 +104,8 @@ const gameController = (function () {
 		let playerName =
 			prompt(`Player ${(playerArray.length) === 0 ? "One" : "Two"} Name:`);
 		while (!isAlphaNumeric(playerName)) {
-			playerName = 
-			prompt(`Player ${(playerArray.length) === 0 ? "One" : "Two"} Name:`);
+			playerName =
+				prompt(`Player ${(playerArray.length) === 0 ? "One" : "Two"} Name:`);
 		};
 		if (playerArray.length == 1) {
 			if (playerArray[0].name === playerName) {
@@ -116,16 +119,16 @@ const gameController = (function () {
 	const promptPlayerMarker = () => {
 		let playerOneMarker;
 		if (playerArray.length == 0) {
-			playerOneMarker = 
+			playerOneMarker =
 				prompt("Pick Marker: 'O' or 'X'").toUpperCase();
 			while (!markerArray.includes(playerOneMarker)) {
-				playerOneMarker = 
+				playerOneMarker =
 					prompt("Pick a valid Marker: 'O' or 'X'").toUpperCase();
 			}
 		} else {
-			if (playerArray[0].marker === 'O'){
+			if (playerArray[0].marker === 'O') {
 				return 'X';
-			}else {
+			} else {
 				return 'O';
 			};
 		};
@@ -145,9 +148,31 @@ const gameController = (function () {
 		// Wait for the first player to make a move
 	}
 
-	return { playerArray, getPlayer }
+	return { playerArray, getPlayer, PlayRound }
 })();
 
 const displayController = (function () {
+	
+	const container = document.querySelector(".container");
+	let gridElement = document.querySelector(".grid")
+	const cache = (function () {
+		container.addEventListener('click', function (event) {
+			// Check if the clicked element is a div with the class 'grid'
+			if (event.target.classList.contains('grid')) {
+				let row = event.target.dataset.row;
+				let col = event.target.dataset.col;
+				gameController.playerArray[0].markGrid(row,col);
+			}
+		});
+	})();
+	const render = function() {
+		for (let i = 0; i < 3; i++) {
+			for (let j = 0; j < 3; j++) {
+				gridElement = document.querySelector(`.grid[data-row="${i}"][data-col="${j}"]`);
+				gridElement.textContent = gameBoard.board[i][j];
 
+			};
+		};
+	};
+	return { render }
 })();
