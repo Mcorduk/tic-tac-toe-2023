@@ -27,9 +27,9 @@ const displayController = (function () {
 		const currentBoard = gameBoard.board.flat()
 
 		if (!gameOver && !currentBoard.includes('')) {
-			return True
+			return true
 		}
-		return False
+		return false
 	};
 	const checkRowWin = () => {
 		for (const row of gameBoard.board) {
@@ -78,6 +78,7 @@ const createPlayer = (name, marker) => {
 };
 
 const gameController = (function () {
+	// Am I using this or what?
 	const markerArray = ['O', 'X']
 	let playerArray = []
 
@@ -113,14 +114,27 @@ const gameController = (function () {
 	};
 	// Ask for a valid marker and return it.
 	const promptPlayerMarker = () => {
+		let playerOneMarker;
 		if (playerArray.length == 0) {
-			let playerOneMarker = prompt("Pick Marker: 'O' or 'X'").toUpperCase();
+			playerOneMarker = 
+				prompt("Pick Marker: 'O' or 'X'").toUpperCase();
 			while (!markerArray.includes(playerOneMarker)) {
-				playerOneMarker = prompt("Pick a valid Marker: 'O' or 'X'").toUpperCase();
+				playerOneMarker = 
+					prompt("Pick a valid Marker: 'O' or 'X'").toUpperCase();
 			}
-		}
+		} else {
+			if (playerArray[0].marker === 'O'){
+				return 'X';
+			}else {
+				return 'O';
+			};
+		};
+		return playerOneMarker;
 	};
 
+	const getPlayer = () => {
+		playerArray.push(createPlayer(promptPlayerName(), promptPlayerMarker()));
+	}
 
-	return { isAlphaNumeric, promptPlayerName, promptPlayerMarker }
+	return { playerArray, getPlayer }
 })();
