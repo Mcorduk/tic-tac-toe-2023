@@ -21,19 +21,46 @@ const gameBoard = (function () {
 //DISPLAY
 const displayController = (function () {
 	let gameOver = false;
+
+	const checkRowWin = () => {
+		for (const row of gameBoard.board){
+			const rowSet = new Set(row);
+			if (rowSet.size === 1 && !rowSet.has('')) {
+				return true;
+			};
+		};
+		return false;
+	};
+	const checkDiagonalWin = () => {
+		const firstDiagonal = 
+			[gameBoard.board[0][0],gameBoard.board[1][1],gameBoard.board[2][2]];
+		const secondDiagonal = 
+			[gameBoard.board[0][2],gameBoard.board[1][1],gameBoard.board[2][0]];
+		const firstSet = new Set(firstDiagonal);
+		const secondSet = new Set(secondDiagonal);
+		if ((firstSet.size === 1 && !firstSet.has(''))
+			|| (secondSet.size === 1 && !secondSet.has(''))) {
+			return true;
+		};
+		return false;
+	};
+	const checkWin = () => {
+		if (checkRowWin() || checkDiagonalWin()) {
+			gameOver = true;
+			return true;
+		};
+		return false;
+	};
 	const markGrid = (marker,row,column) => {
 		const currentRow = gameBoard.board[row]
 		// Has access to the factoryFunction 
 		// created Game Board Object and board property
 		currentRow[column] = marker
 	};
-	const checkRowWin = (currentRow) => {
-		const uniqueValue = new Set(currentRow);
-		return  uniqueValue.size == 1;
-	};
-	const checkDiagonalWin = () => {};
-	return {markGrid ,checkRowWin}
+
+	return {markGrid, checkWin}
 })();
+
 // PLAYER
 const Player = (name, marker) => {
 	
