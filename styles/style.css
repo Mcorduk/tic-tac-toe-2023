@@ -1,0 +1,21 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h1 {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 70px;
+  font-weight: 600;
+  background-image: radial-gradient(circle, #553c9a, #ee4b2b);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+footer {
+  margin-top: auto;
+  height: 100px;
+  align-self: flex-end;
+}
