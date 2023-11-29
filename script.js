@@ -32,7 +32,7 @@ const displayController = (function () {
 		return False
 	};
 	const checkRowWin = () => {
-		for (const row of gameBoard.board){
+		for (const row of gameBoard.board) {
 			const rowSet = new Set(row);
 			if (rowSet.size === 1 && !rowSet.has('')) {
 				return true;
@@ -41,10 +41,10 @@ const displayController = (function () {
 		return false;
 	};
 	const checkDiagonalWin = () => {
-		const firstDiagonal = 
-			[gameBoard.board[0][0],gameBoard.board[1][1],gameBoard.board[2][2]];
-		const secondDiagonal = 
-			[gameBoard.board[0][2],gameBoard.board[1][1],gameBoard.board[2][0]];
+		const firstDiagonal =
+			[gameBoard.board[0][0], gameBoard.board[1][1], gameBoard.board[2][2]];
+		const secondDiagonal =
+			[gameBoard.board[0][2], gameBoard.board[1][1], gameBoard.board[2][0]];
 		const firstSet = new Set(firstDiagonal);
 		const secondSet = new Set(secondDiagonal);
 		if ((firstSet.size === 1 && !firstSet.has(''))
@@ -65,15 +65,62 @@ const displayController = (function () {
 })();
 
 // PLAYER
-const Player = (name, marker) => {
+const createPlayer = (name, marker) => {
+	let turn = false;
 
-	const markGrid = (marker,row,column) => {
-		const currentRow = gameBoard.board[row]
-		// Has access to the factoryFunction 
-		// created Game Board Object and board property
-		currentRow[column] = marker
-	};
+	const markGrid = (row, column) => { gameBoard.board[row][column] = marker; };
 
-	return { name, marker };
+	let playerScore = 0
+	const getScore = () => playerScore;
+	const addScore = () => { playerScore++; }
+
+	return { name, marker, markGrid, getScore, addScore };
 };
 
+const gameController = (function () {
+	const markerArray = ['O', 'X']
+	let playerArray = []
+
+	// Took this from stackOverflow :>
+	function isAlphaNumeric(str) {
+		var code, i, len;
+
+		for (i = 0, len = str.length; i < len; i++) {
+			code = str.charCodeAt(i);
+			if (!(code > 64 && code < 91) && // upper alpha (A-Z)
+				!(code > 96 && code < 123)) { // lower alpha (a-z)
+				return false;
+			}
+		}
+		return true;
+	};
+	// Ask for a valid name and return it
+	const promptPlayerName = () => {
+
+		let playerName =
+			prompt(`Player ${(playerArray.length) === 0 ? "One" : "Two"} Name:`);
+		while (!isAlphaNumeric(playerName)) {
+			playerName = 
+			prompt(`Player ${(playerArray.length) === 0 ? "One" : "Two"} Name:`);
+		};
+		if (playerArray.length == 1) {
+			if (playerArray[0].name === playerName) {
+				alert("Name can not be the same as the other player");
+				return promptPlayerName();
+			};
+		};
+		return playerName;
+	};
+	// Ask for a valid marker and return it.
+	const promptPlayerMarker = () => {
+		if (playerArray.length == 0) {
+			let playerOneMarker = prompt("Pick Marker: 'O' or 'X'").toUpperCase();
+			while (!markerArray.includes(playerOneMarker)) {
+				playerOneMarker = prompt("Pick a valid Marker: 'O' or 'X'").toUpperCase();
+			}
+		}
+	};
+
+
+	return { isAlphaNumeric, promptPlayerName, promptPlayerMarker }
+})();
