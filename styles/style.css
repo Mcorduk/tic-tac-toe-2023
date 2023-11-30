@@ -43,3 +43,14 @@ h3 {
 .hide {
   display: none;
 }
+
+.flex-div{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+}
+.winner {
+  padding-top: 30px;
+}

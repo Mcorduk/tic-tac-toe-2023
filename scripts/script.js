@@ -79,7 +79,6 @@ const winController = (function () {
 	const checkWin = () => {
 		if (checkRowWin() || checkDiagonalWin() ||checkColumnWin()) {
 			gameOver = true;
-
 			return true;
 		};
 		return false;
@@ -211,10 +210,10 @@ const displayController = (function () {
 				}else {
 					gameController.playerArray[1].markGrid(row, col);
 				};
-				render()
+				render();
 				gameController.switchTurns();
 				winController.checkTie();
-				if (winController.checkWin() || winController.checkTie()){
+				if (winController.checkTie() || winController.checkWin()){
 					toggleGameBoard();
 					console.log("game over");
 				}	
@@ -245,8 +244,20 @@ const displayController = (function () {
 		headerText.innerText = `${gameController.getWhoseTurn()}'s Turn.`
 	};
 	//
-	const toggleGameBoard = () => {container.classList.toggle("hide");};
-
+	const toggleGameBoard = () => {
+		container.classList.toggle("hide");
+		document.querySelector(".gameOver").classList.toggle("hide")
+		if (winController.checkWin()) {
+		document.querySelector(".winner").innerText = `${gameController.getWhoseTurn()} Wins!`
+		}else {
+			document.querySelector(".winner").innerText = "It is a Tie!"
+		}
+	};
+	const restartGame = (function () {
+		document.querySelector(".restart").addEventListener("click", function () {
+			location.reload();
+		})
+	})();
 	return { render, renderHeader }
 })();
 
