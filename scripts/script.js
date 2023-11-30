@@ -1,5 +1,5 @@
 
-
+(function(){
 // GAME BOARD
 const gameBoard = (function () {
 	const createBoard = () => {
@@ -29,7 +29,6 @@ const winController = (function () {
 		const currentBoard = gameBoard.board.flat()
 
 		if (!gameOver && !currentBoard.includes('')) {
-			console.log("Tie."); // FIXME
 			gameOver = true;
 			return true;
 		}
@@ -267,4 +266,4 @@ const displayController = (function () {
 	})();
 	return { render, renderHeader }
 })();
-
+})();
