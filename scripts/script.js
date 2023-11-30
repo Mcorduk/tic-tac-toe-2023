@@ -213,7 +213,7 @@ const displayController = (function () {
 				render();
 				gameController.switchTurns();
 				winController.checkTie();
-				if (winController.checkTie() || winController.checkWin()){
+				if (winController.checkGameOver() || winController.checkWin()){
 					toggleGameBoard();
 					console.log("game over");
 				}	
