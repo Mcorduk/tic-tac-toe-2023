@@ -1,3 +1,5 @@
+
+
 // GAME BOARD
 const gameBoard = (function () {
 	const createBoard = () => {
@@ -27,7 +29,7 @@ const winController = (function () {
 		const currentBoard = gameBoard.board.flat()
 
 		if (!gameOver && !currentBoard.includes('')) {
-			console.log("Tie.");
+			console.log("Tie."); // FIXME
 			gameOver = true;
 			return true;
 		}
@@ -166,7 +168,15 @@ const gameController = (function () {
 			[playerArray[0].turn, playerArray[1].turn] = 
 			[playerArray[1].turn, playerArray[0].turn];
 		};
+		displayController.renderHeader();
 	};
+	const getWhoseTurn = () => {
+		if (playerArray[0].turn === true) {
+			return playerArray[0].name;
+		}else {
+			return playerArray[1].name;
+		}
+	}
 	const PlayRound = () => {
 		// Get the first Player
 		getPlayer();
@@ -174,20 +184,22 @@ const gameController = (function () {
 		getPlayer();
 		// Set Player Turn to first Player
 		gameController.playerArray[0].turn = true;
-
+		displayController.renderHeader();
 	}
 
-	return { playerArray, getPlayer, PlayRound, switchTurns }
+	return { playerArray, getPlayer, PlayRound, switchTurns, getWhoseTurn }
 })();
 
 // DISPLAY FUNCTIONALITY
 const displayController = (function () {
 	
-	const container = document.querySelector(".container");
+	let container = document.querySelector(".container");
 	let gridElement = document.querySelector(".grid");
-	let startButton = document.querySelector("button") 
+	let startButton = document.querySelector("button"); 
+	let headerText = document.querySelector("h3");
 
-	const cache = (function () {
+	 // MAIN GAME LOGIC (for some reason it's here)
+	const gridDisplay = (function () {
 		container.addEventListener('click', function (event) {
 			// Check if the clicked element is a div with the class 'grid'
 			if (event.target.classList.contains('grid')) {
@@ -202,7 +214,8 @@ const displayController = (function () {
 				render()
 				gameController.switchTurns();
 				winController.checkTie();
-				if (winController.checkWin()){
+				if (winController.checkWin() || winController.checkTie()){
+					toggleGameBoard();
 					console.log("game over");
 				}	
 			};
@@ -218,11 +231,22 @@ const displayController = (function () {
 			};
 		};
 	};
-	const start = (function () {
+	// Start Button Functionality Anonymous Function
+	(function () {
 		startButton.addEventListener("click", function () {
 			gameController.PlayRound();
 		})
 	})();
+	// Render Header Text
+	const renderHeader = function() {
+		if (winController.checkGameOver()){
+			headerText.innerText = `${gameController.getWhoseTurn()} Wins. Game Over.`
+		}
+		headerText.innerText = `${gameController.getWhoseTurn()}'s Turn.`
+	};
+	//
+	const toggleGameBoard = () => {container.classList.toggle("hide");};
 
-	return { render }
+	return { render, renderHeader }
 })();
+

@@ -37,3 +37,9 @@ a {
 h3 {
   padding-bottom: 40px;
 }
+
+/* Hide class for toggling in JS*/
+
+.hide {
+  display: none;
+}
