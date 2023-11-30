@@ -170,6 +170,13 @@ const gameController = (function () {
 		displayController.renderHeader();
 	};
 	const getWhoseTurn = () => {
+		if (winController.checkWin()) {
+			if (playerArray[0].turn === true) {
+				return playerArray[1].name;
+			}else {
+				return playerArray[0].name;
+			}
+		}
 		if (playerArray[0].turn === true) {
 			return playerArray[0].name;
 		}else {
