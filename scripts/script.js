@@ -27,9 +27,11 @@ const winController = (function () {
 		const currentBoard = gameBoard.board.flat()
 
 		if (!gameOver && !currentBoard.includes('')) {
-			return true
+			console.log("Tie.");
+			gameOver = true;
+			return true;
 		}
-		return false
+		return false;
 	};
 	const checkRowWin = () => {
 		for (const row of gameBoard.board) {
@@ -53,27 +55,44 @@ const winController = (function () {
 		};
 		return false;
 	};
-	const checkWin = () => {
-		if (checkRowWin() || checkDiagonalWin()) {
-			gameOver = true;
+	const checkColumnWin = () => {
+		const firstColumn =
+			[gameBoard.board[0][0], gameBoard.board[1][0], gameBoard.board[2][0]];
+		const secondColumn =
+			[gameBoard.board[0][1], gameBoard.board[1][1], gameBoard.board[2][1]];
+		const thirdColumn =
+			[gameBoard.board[0][2], gameBoard.board[1][2], gameBoard.board[2][2]];
+		
+		const firstSet = new Set(firstColumn);
+		const secondSet = new Set(secondColumn);
+		const thirdSet = new Set(thirdColumn);
+			
+		if ((firstSet.size === 1 && !firstSet.has(''))
+			|| (secondSet.size === 1 && !secondSet.has(''))
+			|| (thirdSet.size === 1 && !thirdSet.has(''))) {
 			return true;
 		};
 		return false;
 	};
+	const checkWin = () => {
+		if (checkRowWin() || checkDiagonalWin() ||checkColumnWin()) {
+			gameOver = true;
 
-	return { checkWin, checkTie }
+			return true;
+		};
+		return false;
+	};
+	const checkGameOver = () => gameOver;
+
+	return { checkWin, checkTie, checkGameOver}
 })();
 
 // PLAYER
 const createPlayer = (name, marker) => {
 	let turn = false;
-
-	const markGrid = (row, column) => { 
-		gameBoard.board[row][column] = marker
-		displayController.render();
-	};
-
 	let playerScore = 0
+
+	const markGrid = (row, column) => {gameBoard.board[row][column] = marker};
 	const getScore = () => playerScore;
 	const addScore = () => { playerScore++; }
 
@@ -138,41 +157,72 @@ const gameController = (function () {
 	const getPlayer = () => {
 		playerArray.push(createPlayer(promptPlayerName(), promptPlayerMarker()));
 	}
-
+	const switchTurns = () => {
+		if (playerArray.length < 2) {
+			console.log("Player Array is empty.");
+			return false
+		}else {
+			// Swap the "turn" property of the first two players in the array
+			[playerArray[0].turn, playerArray[1].turn] = 
+			[playerArray[1].turn, playerArray[0].turn];
+		};
+	};
 	const PlayRound = () => {
 		// Get the first Player
 		getPlayer();
 		//Get the second Player
 		getPlayer();
-		// Display 
-		// Wait for the first player to make a move
+		// Set Player Turn to first Player
+		gameController.playerArray[0].turn = true;
+
 	}
 
-	return { playerArray, getPlayer, PlayRound }
+	return { playerArray, getPlayer, PlayRound, switchTurns }
 })();
 
+// DISPLAY FUNCTIONALITY
 const displayController = (function () {
 	
 	const container = document.querySelector(".container");
-	let gridElement = document.querySelector(".grid")
+	let gridElement = document.querySelector(".grid");
+	let startButton = document.querySelector("button") 
+
 	const cache = (function () {
 		container.addEventListener('click', function (event) {
 			// Check if the clicked element is a div with the class 'grid'
 			if (event.target.classList.contains('grid')) {
 				let row = event.target.dataset.row;
 				let col = event.target.dataset.col;
-				gameController.playerArray[0].markGrid(row,col);
-			}
+
+				if (gameController.playerArray[0].turn === true) {
+					gameController.playerArray[0].markGrid(row, col);
+				}else {
+					gameController.playerArray[1].markGrid(row, col);
+				};
+				render()
+				gameController.switchTurns();
+				winController.checkTie();
+				if (winController.checkWin()){
+					console.log("game over");
+				}	
+			};
 		});
 	})();
+
 	const render = function() {
 		for (let i = 0; i < 3; i++) {
 			for (let j = 0; j < 3; j++) {
 				gridElement = document.querySelector(`.grid[data-row="${i}"][data-col="${j}"]`);
 				gridElement.textContent = gameBoard.board[i][j];
-
+				
 			};
 		};
 	};
+	const start = (function () {
+		startButton.addEventListener("click", function () {
+			gameController.PlayRound();
+		})
+	})();
+
 	return { render }
 })();
