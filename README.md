@@ -1,5 +1,9 @@
 # Tic Tac Toe Game
 
+Made with Vanilla Js, HTML and CSS.
+
+Live Preview: https://mcorduk.github.io/tic-tac-toe-2023/
+
 A simple implementation of the classic Tic Tac Toe game with JavaScript, HTML, and CSS.
 
 ## Table of Contents
